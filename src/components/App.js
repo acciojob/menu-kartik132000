@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import "./styles.css";
 
 const MENU_DATA = [
   { id: 1, title: "Buttermilk Pancakes", category: "breakfast", price: "$15.99", img: "./images/item-1.jpeg", desc: "Delicious buttermilk pancakes with syrup." },
@@ -14,25 +13,25 @@ const MENU_DATA = [
   { id: 9, title: "Quarantine Buddy", category: "shakes", price: "$16.99", img: "./images/item-9.jpeg", desc: "A comforting milkshake with a twist." },
 ];
 
-const categories = ["All", "Breakfast", "Lunch", "Shakes"];
+const categories = ["all", "breakfast", "lunch", "shakes"];
 
 const Menu = () => {
   const [list, setList] = useState(MENU_DATA);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("all");
 
   const onFilter = (category) => {
     setActiveCategory(category);
-    if (category === "All") {
+    if (category === "all") {
       setList(MENU_DATA);
     } else {
-      setList(MENU_DATA.filter((item) => item.category.toLowerCase() === category.toLowerCase()));
+      setList(MENU_DATA.filter((item) => item.category === category));
     }
   };
 
   return (
-    <div id="main" className="container">
+    <div id="main">
       <h1>Our Menu</h1>
-      <div className="categories">
+      <div>
         {categories.map((category, index) => (
           <button
             key={category}
@@ -40,20 +39,16 @@ const Menu = () => {
             className={activeCategory === category ? "active" : ""}
             onClick={() => onFilter(category)}
           >
-            {category}
+            {category.charAt(0).toUpperCase() + category.slice(1)}
           </button>
         ))}
       </div>
-      <div className="menu">
+      <div>
         {list.map((item) => (
-          <div
-            className="menu-item"
-            key={item.id}
-            data-test-id={`menu-item-${item.category.toLowerCase()}`}
-          >
+          <div key={item.id} data-test-id={`menu-item-${item.category}`}>
             <img src={item.img} alt={item.title} />
-            <div className="menu-content">
-              <h3>{item.title} <span className="price">{item.price}</span></h3>
+            <div>
+              <h3>{item.title} <span>{item.price}</span></h3>
               <p>{item.desc}</p>
             </div>
           </div>
