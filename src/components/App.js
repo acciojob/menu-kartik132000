@@ -1,133 +1,60 @@
 import React from "react";
 import { useState } from "react";
+import "./styles.css";
 
 const MENU_DATA = [
-  {
-    id: 1,
-    title: "buttermilk pancakes",
-    category: "breakfast",
-    price: 15.99,
-    img: "./images/item-1.jpeg",
-    desc: `I'm baby woke mlkshk wolf bitters live-edge blue bottle, hammock freegan copper mug whatever cold-pressed `,
-  },
-  {
-    id: 2,
-    title: "diner double",
-    category: "lunch",
-    price: 13.99,
-    img: "./images/item-2.jpeg",
-    desc: `vaporware iPhone mumblecore selvage raw denim slow-carb leggings gochujang helvetica man braid jianbing. Marfa thundercats `,
-  },
-  {
-    id: 3,
-    title: "godzilla milkshake",
-    category: "shakes",
-    price: 6.99,
-    img: "./images/item-3.jpeg",
-    desc: `ombucha chillwave fanny pack 3 wolf moon street art photo booth before they sold out organic viral.`,
-  },
-  {
-    id: 4,
-    title: "country delight",
-    category: "breakfast",
-    price: 20.99,
-    img: "./images/item-4.jpeg",
-    desc: `Shabby chic keffiyeh neutra snackwave pork belly shoreditch. Prism austin mlkshk truffaut, `,
-  },
-  {
-    id: 5,
-    title: "egg attack",
-    category: "lunch",
-    price: 22.99,
-    img: "./images/item-5.jpeg",
-    desc: `franzen vegan pabst bicycle rights kickstarter pinterest meditation farm-to-table 90's pop-up `,
-  },
-  {
-    id: 6,
-    title: "oreo dream",
-    category: "shakes",
-    price: 18.99,
-    img: "./images/item-6.jpeg",
-    desc: `Portland chicharrones ethical edison bulb, palo santo craft beer chia heirloom iPhone everyday`,
-  },
-  {
-    id: 7,
-    title: "bacon overflow",
-    category: "breakfast",
-    price: 8.99,
-    img: "./images/item-7.jpeg",
-    desc: `carry jianbing normcore freegan. Viral single-origin coffee live-edge, pork belly cloud bread iceland put a bird `,
-  },
-  {
-    id: 8,
-    title: "american classic",
-    category: "lunch",
-    price: 12.99,
-    img: "./images/item-8.jpeg",
-    desc: `on it tumblr kickstarter thundercats migas everyday carry squid palo santo leggings. Food truck truffaut  `,
-  },
-  {
-    id: 9,
-    title: "quarantine buddy",
-    category: "shakes",
-    price: 16.99,
-    img: "./images/item-9.jpeg",
-    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
-  },
+  { id: 1, title: "Buttermilk Pancakes", category: "breakfast", price: "$15.99", img: "./images/item-1.jpeg", desc: "Delicious buttermilk pancakes with syrup." },
+  { id: 2, title: "Diner Double", category: "lunch", price: "$13.99", img: "./images/item-2.jpeg", desc: "Classic double-stacked burger with fries." },
+  { id: 3, title: "Godzilla Milkshake", category: "shakes", price: "$6.99", img: "./images/item-3.jpeg", desc: "A monstrous milkshake with chocolate drizzle." },
+  { id: 4, title: "Country Delight", category: "breakfast", price: "$20.99", img: "./images/item-4.jpeg", desc: "A hearty country-style breakfast plate." },
+  { id: 5, title: "Egg Attack", category: "lunch", price: "$22.99", img: "./images/item-5.jpeg", desc: "Savory egg sandwich with cheese and bacon." },
+  { id: 6, title: "Oreo Dream", category: "shakes", price: "$18.99", img: "./images/item-6.jpeg", desc: "Creamy Oreo milkshake with whipped cream." },
+  { id: 7, title: "Bacon Overflow", category: "breakfast", price: "$8.99", img: "./images/item-7.jpeg", desc: "Bacon-lovers' dream breakfast plate." },
+  { id: 8, title: "American Classic", category: "lunch", price: "$12.99", img: "./images/item-8.jpeg", desc: "A traditional American-style cheeseburger." },
+  { id: 9, title: "Quarantine Buddy", category: "shakes", price: "$16.99", img: "./images/item-9.jpeg", desc: "A comforting milkshake with a twist." },
 ];
 
+const categories = ["All", "Breakfast", "Lunch", "Shakes"];
+
 const Menu = () => {
-  const [list, setlist] = useState(MENU_DATA);
+  const [list, setList] = useState(MENU_DATA);
+  const [activeCategory, setActiveCategory] = useState("All");
 
   const onFilter = (category) => {
-    if (category === "all") {
-      setlist(MENU_DATA);
+    setActiveCategory(category);
+    if (category === "All") {
+      setList(MENU_DATA);
     } else {
-      const matches = MENU_DATA.filter((i) => i.category === category);
-
-      setlist(matches);
+      setList(MENU_DATA.filter((item) => item.category.toLowerCase() === category.toLowerCase()));
     }
   };
+
   return (
-    <div id="main">
+    <div id="main" className="container">
       <h1>Our Menu</h1>
-
-      <div>
-        <button id="filter-btn-0" onClick={() => onFilter("all")}>
-          All
-        </button>
-        <button id="filter-btn-1" onClick={() => onFilter("breakfast")}>
-          Breakfast
-        </button>
-        <button id="filter-btn-2" onClick={() => onFilter("lunch")}>
-          Lunch
-        </button>
-        <button id="filter-btn-3" onClick={() => onFilter("shakes")}>
-          Shakes
-        </button>
-      </div>
-
-      <div>
-        {list.map((i) => (
-          <div
-            data-test-id={
-              i.category === "breakfast"
-                ? "menu-item-breakfast"
-                : i.category === "lunch"
-                ? "menu-item-lunch"
-                : "menu-item-shakes"
-            }
-            key={i.id}
+      <div className="categories">
+        {categories.map((category, index) => (
+          <button
+            key={category}
+            id={`filter-btn-${index}`}
+            className={activeCategory === category ? "active" : ""}
+            onClick={() => onFilter(category)}
           >
-            <div>
-              <img src={i.img} alt={i.title} />
-            </div>
-            <div>
-              <div>
-                <span>{i.title}</span>
-                <span>{i.price}</span>
-              </div>
-              <div>{i.desc}</div>
+            {category}
+          </button>
+        ))}
+      </div>
+      <div className="menu">
+        {list.map((item) => (
+          <div
+            className="menu-item"
+            key={item.id}
+            data-test-id={`menu-item-${item.category.toLowerCase()}`}
+          >
+            <img src={item.img} alt={item.title} />
+            <div className="menu-content">
+              <h3>{item.title} <span className="price">{item.price}</span></h3>
+              <p>{item.desc}</p>
             </div>
           </div>
         ))}
